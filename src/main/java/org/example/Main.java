@@ -3,6 +3,7 @@ package org.example;
 import java.sql.*;
 
 public class Main {
+    public static int index = 1;
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
 
@@ -16,23 +17,24 @@ public class Main {
 
         System.out.println("Connection Successful");
 
-        Statement stmt = con.createStatement();
-        read(stmt);
 
-        addData(stmt);
+        read(con);
 
-        updateData(stmt);
+        addData(con);
 
-        delete(stmt);
+        updateData(con);
 
-        read(stmt);
+        delete(con);
+
+        read(con);
 
         con.close();
         System.out.println("Connection Closed");
     }
 
-    public static void read(Statement stmt) throws SQLException {
+    public static void read(Connection con) throws SQLException {
 
+        Statement stmt = con.createStatement();
         String query = "SELECT * FROM student order by id asc";
         ResultSet rs = stmt.executeQuery(query);
 
@@ -45,18 +47,32 @@ public class Main {
         }
     }
 
-    public static void addData(Statement stmt) throws SQLException {
-        String query = "INSERT INTO student VALUES(7, 'Çakıl', 5)";
-        stmt.execute(query);
+    public static void addData(Connection con) throws SQLException {
+
+        String query = "INSERT INTO student VALUES(?, ?, ?)";
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setInt(1, 11);
+        stmt.setString(2, "John");
+        stmt.setInt(3, 90);
+
+        stmt.execute();
     }
 
-    public static void updateData(Statement stmt) throws SQLException {
-        String query = "UPDATE student SET marks = 100 WHERE id = 5";
-        stmt.execute(query);
+    public static void updateData(Connection con) throws SQLException {
+        String query = "UPDATE student SET marks = ? WHERE id = ?";
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setInt(1, 90);
+        stmt.setInt(2, 1);
+
+        stmt.execute();
     }
 
-    public static void delete(Statement stmt) throws SQLException {
-        String query = "DELETE FROM student WHERE id = 4";
-        stmt.execute(query);
+    public static void delete(Connection con) throws SQLException {
+        String query = "DELETE FROM student WHERE id = ?";
+        PreparedStatement stmt = con.prepareStatement(query);
+
+        stmt.setInt(1, 6);
+
+        stmt.execute();
     }
 }
