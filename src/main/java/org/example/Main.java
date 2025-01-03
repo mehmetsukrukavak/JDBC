@@ -20,7 +20,7 @@ public class Main {
 
         read(con);
 
-        addData(con);
+        create(con);
 
         updateData(con);
 
@@ -47,7 +47,7 @@ public class Main {
         }
     }
 
-    public static void addData(Connection con) throws SQLException {
+    public static void create(Connection con) throws SQLException {
 
         String query = "INSERT INTO student VALUES(?, ?, ?)";
         PreparedStatement stmt = con.prepareStatement(query);
